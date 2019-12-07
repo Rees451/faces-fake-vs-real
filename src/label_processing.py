@@ -34,6 +34,18 @@ def segment_labeled_image(img,
                           label_dict={},
                           desired_labels=['eyes', 'mouth', 'nose']):
 
+    img_labels = run_kmeans(img, n_clusters)
+
+    # Translate the labels into labels
+    img_labels = convert_labels(img_labels, img, label_dict, desired_labels)
+    img_labels = img_labels.astype(np.uint8)
+    img_labels = split_eyes(img_labels, label_dict)
+
+    return img_labels
+
+
+def run_kmeans(img, n_clusters):
+
     # create features
     make_flat = MakeFlat(img.shape)
     flat_image = make_flat.transform(img)
@@ -44,11 +56,6 @@ def segment_labeled_image(img,
     labels = kmeans.labels_ + 1
 
     img_labels = make_flat.inverse_transform(labels)
-
-    # Translate the labels into labels
-    img_labels = convert_labels(img_labels, img, label_dict, desired_labels)
-    img_labels = img_labels.astype(np.uint8)
-    img_labels = split_eyes(img_labels, label_dict)
 
     return img_labels
 

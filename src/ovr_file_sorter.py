@@ -1,5 +1,6 @@
 import os
 from shutil import copyfile
+import sys
 
 
 def sort_files(source, dest, as_links):
@@ -98,9 +99,17 @@ def check_numbers(source, dest, criteria, as_links):
 
 if __name__ == '__main__':
 
+    if len(sys.argv) > 1:
+        source = sys.argv[1]
+    else:
+        source = './ml-database'
+
+    if len(sys.argv) > 1:
+        dest = sys.argv[2]
+    else:
+        dest = './data/processed'
+
     # Sort files
-    source = './ml-database'
-    dest = './data'
     as_links = True
     sort_files(source, dest, as_links)
 
