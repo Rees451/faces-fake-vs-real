@@ -108,5 +108,5 @@ settings.json
 .DS_Store
 .vscode
 
-# Cleandata and large files
+# Cleandata and large files, don't save the models as they are big!
 models
