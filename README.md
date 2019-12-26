@@ -2,13 +2,15 @@
 
 ## Summary
 
-This project was undertaken as part of the data science immersive course at General Assembly. The aim was to apply computer vision techniques to human faces to detect whether they had been photoshopped or not. The project ended up falling into two parts. The former focussed on implmenting the work outlined in [1] and [2] in segmenting human faces and the second part was concerned with developing a classifier using [this dataset](https://www.kaggle.com/ciplab/real-and-fake-face-detection)
+This project was undertaken as part of the data science immersive course at General Assembly. The initial aim was to apply computer vision techniques to human faces to detect whether they had been photoshopped or not. The project ended up bifurcating into two parts. The former focussed on implmenting the work outlined in [1] and [2] in segmenting human faces and the second part was concerned with developing a classifier to detect fake faces using [this dataset](https://www.kaggle.com/ciplab/real-and-fake-face-detection)
+
+The project was carried out using the Python programming lanuage and utilised Sklearn and Tensorflow.
 
 ## Links
 
 
-* [Part 1: segmenting faces](/notebooks/segmenting_faces.ipynb)
-* [Part 2: developing a classifier](/notebooks/fake_vs_real.ipynb)
+* [Part 1: segmenting faces](./segmentation)
+* [Part 2: developing a classifier](./fake_vs_real)
 
 ## References
 
