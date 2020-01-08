@@ -14,11 +14,10 @@ The purpose of this project was to develop a classifier to detect fake images of
 
 ## Project Structure
 
-2. Raw Data is being kept [here](./data/raw) within this repo.
-
-3. Some python scripts are [here](./src)
-4. Notebooks are kept [here](./notebooks)
-5. A demo of the project constructured as a game is kept [here](./demo)
+1. Raw Data is kept [here](./data/raw) within this repo
+2. Some python scripts are [here](./src)
+3. Notebooks are kept [here](./notebooks)
+4. A demo of the project constructured as a game is kept [here](./demo)
 
 ## Featured Notebooks/Analysis/Deliverables
 * [EDA/ Data Visualisation](.notebooks/EDA.ipynb)
