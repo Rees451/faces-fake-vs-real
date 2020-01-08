@@ -1,5 +1,5 @@
 '''
-Demo of the classificaiton algorithm in a game format - can you beat the
+Demo of the classification algorithm in a game format - can you beat the
 algorithm at spotting the fake pictures?
 '''
 
@@ -10,20 +10,21 @@ import sys
 import numpy as np
 
 # Get the full path of the 'fake vs real' project directory
-if 'fake_vs_real' not in os.getcwd():
-    project_path = os.path.abspath(os.getcwd() + '/fake_vs_real')
+if 'fake-vs-real' not in os.getcwd():
+    project_path = os.path.abspath(os.getcwd() + '/faces-fake-vs-real')
 else:
     project_path = os.getcwd()
 
 # Append project path to sys.path to access files/trained models, NOQA
-# stops flake8 compalaining
+# stops flake8 complaining
 sys.path.append(project_path + '/src')
+print(sys.path)
 import trained_model as tm  # NOQA
 import loading as ld  # NOQA
 
 # File locations
-model_dir = project_path + '/models'
-model_id = 'c1'
+model_dir = project_path + '/models/gs_results'
+model_id = 'best_c1_gs'
 
 # Game Section ----------------------------------------------------------------
 pygame.init()
@@ -186,6 +187,7 @@ def start_loop():
 def end_game(scoreboard, player, algo):
     clock = pygame.time.Clock()
     done = False
+    restart = False
 
     while not done:
 
@@ -204,13 +206,24 @@ def end_game(scoreboard, player, algo):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
-                    main_loop()
+                    done = True
+                    restart = True
                 elif event.key == pygame.K_ESCAPE:
                     done = True
             elif event.type == pygame.QUIT:
-                doen = True
-    
-    return done
+                done = True
+
+    return restart
+
+
+def setup():
+    # Initialise the players and scoreboard and img pairs
+    player = Player()
+    algo = Algo()
+    scoreboard = Scoreboard()
+    img_pair = ImgPair(fakes, reals)
+
+    return player, algo, scoreboard, img_pair
 
 
 # Main game loop --------------------------------------------------------------
@@ -218,10 +231,7 @@ def main_loop():
     clock = pygame.time.Clock()
 
     # Initialise the players and scoreboard and img pairs
-    player = Player()
-    algo = Algo()
-    scoreboard = Scoreboard()
-    img_pair = ImgPair(fakes, reals)
+    player, algo, scoreboard, img_pair = setup()
 
     done = False
     while not done:
@@ -235,7 +245,8 @@ def main_loop():
 
         # Blit instructions
         font = pygame.font.Font('freesansbold.ttf', 32)
-        text = font.render('Select which image is fake using arrow keys', True, BLACK)
+        text = font.render('Select which image is fake using arrow keys', True,
+                           BLACK)
         textRect = text.get_rect()
         textRect.center = (width // 2, height - 40)
         game_display.blit(text, textRect)
@@ -262,10 +273,12 @@ def main_loop():
                 img_pair.get_next()
 
         if img_pair.left is None:
-            done = end_game(scoreboard, player, algo)
-        
-        
-    
+            restart = end_game(scoreboard, player, algo)
+            if restart:
+                player, algo, scoreboard, img_pair = setup()
+            else:
+                done = True
+            # Else if done is True game will exit
 
 
 # Run the main_loop and quit it the loop ends

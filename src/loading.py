@@ -35,7 +35,8 @@ def load_data_generator(train_dir,
                                           target_size=target_size,
                                           batch_size=val_batch_size,
                                           shuffle=True,
-                                          seed=1)
+                                          seed=1,
+                                          classes=['real', 'fake'])
 
     assert train.class_indices == val.class_indices
     print('Class Indicies:', train.class_indices)
@@ -59,7 +60,8 @@ def load_test_generator(test_dir, batch_size=-1, img_shape=(64, 64, 3)):
                                             class_mode="binary",
                                             target_size=target_size,
                                             batch_size=batch_size,
-                                            seed=1)
+                                            seed=1,
+                                            classes=['real', 'fake'])
 
     return test
 
@@ -86,7 +88,7 @@ def get_paths(test_dir, dif='easy', n=1, shuffle=True):
     real_d_ls = [i for i in real_ls]
 
     # Shuffle these lists
-    random.seed(2)
+    random.seed(3)
     random.shuffle(fake_d_ls)
     random.shuffle(real_d_ls)
 
@@ -208,10 +210,10 @@ class DsLoader():
         return ds
 
     def flip(self, x, y):
-        """Flip augmentation
+        """Flip an image up and down and left and right randomly
 
         Args:
-            x: Image to flip
+            x: Image
 
         Returns:
             Augmented image
@@ -222,7 +224,7 @@ class DsLoader():
         return x, y
 
     def rotate(self, x, y):
-        """Rotation augmentation
+        """Randomly rotate and image by a multiple of 90 degrees
 
         Args:
             x: Image

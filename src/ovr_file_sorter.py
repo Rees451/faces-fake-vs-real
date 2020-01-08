@@ -18,6 +18,23 @@ def sort_files(source, dest, as_links):
     criteria_copy(real_dir, fake_dir, dest, 'nose', as_links)
 
 
+def criteria_copy(real_dir, fake_dir, dest, criteria, as_links):
+
+    if as_links is True:
+        lin = '_links'
+    else:
+        lin = ''
+
+    real_dest = f'{dest}/real_and_fake_face_ovr{lin}/' + criteria + '/real'
+    fake_dest = f'{dest}/real_and_fake_face_ovr{lin}/' + criteria + '/fake'
+
+    # Copy photoshoped files
+    copy_files(fake_dir, fake_dest, real_dest, criteria, as_links)
+
+    # Copy real files
+    copy_files(real_dir, real_destination=real_dest, as_links=as_links)
+
+
 def copy_files(source,
                fake_destination=False,
                real_destination='',
@@ -57,23 +74,6 @@ def copy_files(source,
             copyfile(source_file, destination)
         elif as_links is True and not os.path.exists(destination):
             os.symlink(source_file, destination)
-
-
-def criteria_copy(real_dir, fake_dir, dest, criteria, as_links):
-
-    if as_links is True:
-        lin = '_links'
-    else:
-        lin = ''
-
-    real_dest = f'{dest}/real_and_fake_face_ovr{lin}/' + criteria + '/real'
-    fake_dest = f'{dest}/real_and_fake_face_ovr{lin}/' + criteria + '/fake'
-
-    # Copy photoshoped files
-    copy_files(fake_dir, fake_dest, real_dest, criteria, as_links)
-
-    # Copy real files
-    copy_files(real_dir, real_destination=real_dest, as_links=as_links)
 
 
 def check_numbers(source, dest, criteria, as_links):

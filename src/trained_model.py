@@ -19,12 +19,14 @@ class TrainedModel():
         self.model = tf.keras.models.load_model(model_dir + '/' + model_id +
                                                 '.h5')
         self.train_history = joblib.load(model_dir + '/' + model_id +
-                                         '_history')
+                                         '_history.gz')
 
         self.img_shape = tuple(self.model.input.shape[1:])
 
-        # Utility function to plot history of training a network
     def plot_training(self):
+        '''
+        Utility function to plot history of training a network
+        '''
         train_accuracy = self.train_history['accuracy']
         val_accuracy = self.train_history['val_accuracy']
         epoch = range(1, len(train_accuracy) + 1)
@@ -36,22 +38,26 @@ class TrainedModel():
         ax.legend()
         plt.legend(framealpha=0)
 
-    # Function to return confusion matrix given a model and data
     def conf_matrix(self, test):
-        predict_labels = self.model.predict_classes(self.test[0][0])
-        ground_truth = self.test[0][1]
+        '''
+        Function to return confusion matrix given a model and data
+        '''
+        predict_labels = self.model.predict(test[0][0]).argmax(axis=1)
+        ground_truth = test[0][1]
 
         df = pd.DataFrame(confusion_matrix(ground_truth, predict_labels),
                           columns=['Predicted Fake', ' Predicted Real'],
                           index=['Actual Fake', 'Actual Real'])
         return df
 
-    # Function to return the classification summary
     def classification_report(self, test):
-        predict_labels = self.model.predict_classes(self.test[0][0])
-        ground_truth = self.test[0][1]
-        keys = self.test.class_indices.keys()
-        labels = [self.test.class_indices[key] for key in keys]
+        '''
+        Function to return the classification summary
+        '''
+        predict_labels = self.model.predict(test[0][0]).argmax(axis=1)
+        ground_truth = test[0][1]
+        keys = test.class_indices.keys()
+        labels = [test.class_indices[key] for key in keys]
 
         print(
             classification_report(ground_truth,
@@ -60,36 +66,31 @@ class TrainedModel():
                                   target_names=keys))
 
     # Function to convert predicted probabilities into class predictions
-    def prob_to_labels(predict_prob):
-        if len(predict_prob[0]) == 1:
-            predict_labels = [0 if i > 0.5 else 1 for i in predict_prob]
-        else:
-            pass
-        return predict_labels
+    # def prob_to_labels(predict_prob):
+    #     if len(predict_prob[0]) == 1:
+    #         predict_labels = [0 if i > 0.5 else 1 for i in predict_prob]
+    #     else:
+    #         pass
+    #     return predict_labels
 
-    def test_on_difficulty(self, tests=1000):
+    def test_on_difficulty(self, test_dir, tests=1000, dif='hard'):
+        '''
+        Run pairwise test on a number of images
 
+        Args: 
+            test_dir (str): location of images
+            tests (int): number of tests
+            dif (str): 'hard'/'mid'/'easy'
+
+        Returns:
+            Proportion of pairs that algorithm got correct
+        '''
         fake_paths, real_paths = self._get_paths(test_dir, dif, n=tests)
 
-        fake_imgs = np.zeros((tests, ) + self.img_shape)
-        real_imgs = np.zeros((tests, ) + self.img_shape)
+        fake_on = self.spot_from_pair(fake_paths, real_paths)
 
-        for i, (fake_path, real_path) in enumerate(zip(fake_paths,
-                                                       real_paths)):
-            fake_imgs[i], _ = self._process_path(fake_path)
-            real_imgs[i], _ = self._process_path(real_path)
-
-        fake_imgs = tf.convert_to_tensor(fake_imgs)
-        real_imgs = tf.convert_to_tensor(real_imgs)
-
-        print(fake_imgs[0])
-
-        fake_probs = self.model.predict(fake_imgs)
-        real_probs = self.model.predict(real_imgs)
-
-        correct = (fake_probs < real_probs) * 1
-
-        return np.mean(correct)
+        # All fakes on 'left' so number correct is number of lefts
+        return (np.array(fake_on) == 'left').mean()
 
     def _get_paths(self, test_dir, dif='hard', n=1):
         real_ls = os.listdir(f'{test_dir}/real')
@@ -131,11 +132,11 @@ class TrainedModel():
         n_pairs = len(left_paths)
         left_imgs = np.zeros((n_pairs, ) + self.img_shape)
         right_imgs = np.zeros((n_pairs, ) + self.img_shape)
-        print('left_paths in spot_from_pair', left_paths)
+        # print('left_paths in spot_from_pair', left_paths)
         for i, (left_path,
                 right_path) in enumerate(zip(left_paths, right_paths)):
 
-            print('Attempting to read image from:', left_path)
+            # print('Attempting to read image from:', left_path)
             left_imgs[i], _ = self._process_path(left_path)
             right_imgs[i], _ = self._process_path(right_path)
 
@@ -144,7 +145,6 @@ class TrainedModel():
 
         left_probs = self.model.predict(left_imgs)
         right_probs = self.model.predict(right_imgs)
-        print(left_probs)
         dif = ((left_probs[:, 1] - right_probs[:, 1]) > 0) * 1
 
         fake_on = ['left' if i == 1 else 'right' for i in dif]

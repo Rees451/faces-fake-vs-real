@@ -1,8 +1,6 @@
 # Fake vs Real Face Detection
-#### -- Project Status: [Completed]
-
 ## Project Intro/Objective
-The purpose of this project was to develop a classifier to detect fake images of faces. A write up of the methodology used and key results can be found in [this blog post](edward-rees.com/blog)
+The purpose of this project was to develop a classifier to detect fake images of faces. A write up of the methodology used and key results can be found in [this blog post](edward-rees.com/blog).
 
 ### Methods Used
 * Machine Learning
@@ -11,18 +9,14 @@ The purpose of this project was to develop a classifier to detect fake images of
 ### Technologies
 * Python
 * jupyter
-* Tensorflow
-* Sklearn
+* Tensorflow (incl. Tensorboard)
+* Sklearn 
 
-## Project Description
-This project was motivated in part my the rising tide of doctored images and 'deep fake' videos online. 
+## Project Structure
 
-## Project Structure / Getting Started
-
-1. Clone this repo (for help see this [tutorial](https://help.github.com/articles/cloning-a-repository/)).
 2. Raw Data is being kept [here](./data/raw) within this repo.
 
-3. Data processing/transformation scripts are being kept [here](./src)
+3. Some python scripts are [here](./src)
 4. Notebooks are kept [here](./notebooks)
 5. A demo of the project constructured as a game is kept [here](./demo)
 
