@@ -37,9 +37,11 @@ I additionally tried to pre train a model using a synthetically generated datase
 
 ## Game
 
-In order to showcase my model and 'deploy' it I made a game where the player is presented with two pictures, one of which is photoshopped and one which is not. They then must guess which is the fake one. Once the player has made their selection the image is fed into the trained model which also makes a prediction. The aim is to try and get more correct than the algorithm. To play the game clone my github repo and run the script [`demo.py`](./demo/demo.py).
+In order to showcase my model and 'deploy' it I made a game where the player is presented with two pictures, one of which is photoshopped and one which is not. They then must guess which is the fake one. Once the player has made their selection the image is fed into the trained model which also makes a prediction. The aim is to try and get more correct than the algorithm. To play the game clone my github repo and run the script [`/demo/demo.py`](./demo/demo.py).
 
 Screenshot of game:
+
+<img src="assets/image-20200226193055112.png" alt="image-20200226193055112" style="zoom:50%;" />
 
 
 ## Contact

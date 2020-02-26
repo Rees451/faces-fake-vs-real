@@ -10,15 +10,16 @@ import sys
 import numpy as np
 
 # Get the full path of the 'fake vs real' project directory
-if 'fake-vs-real' not in os.getcwd():
-    project_path = os.path.abspath(os.getcwd() + '/faces-fake-vs-real')
-else:
-    project_path = os.getcwd()
+# if 'fake-vs-real' or 'Faces' not in os.getcwd():
+#     project_path = os.path.abspath(os.getcwd() + '/faces-fake-vs-real')
+# else:
+project_path = os.getcwd()
 
 # Append project path to sys.path to access files/trained models, NOQA
 # stops flake8 complaining
 sys.path.append(project_path + '/src')
-print(sys.path)
+sys.path.append('../src')
+sys.path.append('./src')
 import trained_model as tm  # NOQA
 import loading as ld  # NOQA
 
