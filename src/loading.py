@@ -105,19 +105,11 @@ class DsLoader():
                  problem='all',
                  full_label=False):
         self.dir_path = dir_path
-        self.train_path = dir_path + '/train'
-        self.val_path = dir_path + '/val'
-        self.test_path = dir_path + '/test'
         self.image_size = image_size
         self.full_label = full_label
 
     def get_ds(self, split='train', batch_size=32, augment=False, n_repeats=1):
-        if split == 'train':
-            dir_path = self.train_path
-        elif split == 'val':
-            dir_path = self.val_path
-        elif split == 'test':
-            dir_path = self.test_path
+        dir_path = '/'.join(self.dir_path, split)
 
         list_ds = tf.data.Dataset.list_files(dir_path + '/*/*.jpg')
 
